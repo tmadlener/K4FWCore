@@ -26,16 +26,16 @@ StatusCode PodioDataSvc::initialize() {
 
   if (m_filenames.size() > 0) {
     if (m_filenames[0] != "") {
-      m_reader.openFiles(m_filenames);
-      m_eventMax = m_reader.getEntries();
+      m_reader->openFiles(m_filenames);
+      m_eventMax = m_reader->getEntries();
 
-      m_provider.setReader(&m_reader);
+      m_provider.setReader(m_reader.get());
 
       auto idTable = m_provider.getCollectionIDTable();
       setCollectionIDs(idTable);
 
       if (m_1stEvtEntry != 0 ) {
-          m_reader.goToEvent(m_1stEvtEntry);
+          m_reader->goToEvent(m_1stEvtEntry);
           m_eventMax -= m_1stEvtEntry;
       }
     }
@@ -75,7 +75,7 @@ void PodioDataSvc::endOfRead() {
   StatusCode sc;
   if (m_eventMax != -1) {
     m_provider.clearCaches();
-    m_reader.endOfEvent();
+    m_reader->endOfEvent();
     if (m_eventNum++ > m_eventMax) {
       info() << "Reached end of file with event " << m_eventMax << endmsg;
       IEventProcessor* eventProcessor;

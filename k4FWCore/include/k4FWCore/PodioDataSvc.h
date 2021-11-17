@@ -7,9 +7,14 @@
 #include "podio/CollectionBase.h"
 #include "podio/CollectionIDTable.h"
 #include "podio/EventStore.h"
+// #include "podio/IReader.h"
 #include "podio/ROOTReader.h"
 
+#include "TTree.h"
+
 #include <utility>
+#include <memory>
+
 // Forward declarations
 
 /** @class PodioEvtSvc EvtDataSvc.h
@@ -60,7 +65,10 @@ private:
   // eventDataTree
   TTree* m_eventDataTree;
   /// PODIO reader for ROOT files
-  podio::ROOTReader m_reader;
+  // std::unique_ptr<podio::IReader> m_reader{nullptr};
+  std::unique_ptr<podio::ROOTReader> m_reader{nullptr};
+
+  // podio::ROOTReader m_reader;
   /// PODIO EventStore, used to initialise collections
   podio::EventStore m_provider;
   /// Counter of the event number
